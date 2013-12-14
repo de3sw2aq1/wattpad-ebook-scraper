@@ -11,28 +11,27 @@ session = requests.session()
 session.cookies['android-noprompt'] = '1'
 session.cookies['skip-download-page'] = '1'
 
-
 # Used by android app normally
 # Example parameters are what android provides
-API_STORYINFO = 'http://www.wattpad.com/api/v3/stories/' #8420562\?drafts\=0\&include_deleted\=1
+API_STORYINFO = 'http://www.wattpad.com/api/v3/stories/' #9876543?drafts=0&include_deleted=1
 
 # Used by website and android app normally
-# Example parameter is what website provides
-API_STORYTEXT = 'http://www.wattpad.com/apiv2/storytext' # ?id=25736741
-# Android uses these parameters: ?id\=25736741\&increment_read_count\=1\&include_paragraph_id\=1\&output\=text_zip
+API_STORYTEXT = 'http://www.wattpad.com/apiv2/storytext' # ?id=23456789
+# Webpage uses a page parameter: ?id=23456789&page=1
+# Android uses these parameters: ?id=23456789&increment_read_count=1&include_paragraph_id=1&output=text_zip
 
 # Documented api
 API_GETCATEGORIES = 'http://www.wattpad.com/apiv2/getcategories'
-
 
 # Fixup the categories data, this could probably be cached too
 categories = json.loads(session.get(API_GETCATEGORIES).content)
 categories = {int(k): v for k, v in categories.iteritems()}
 
 def download_story(story_url):
-    # TODO verify better
+    # TODO verify input URL better
     story_id = story_url.split('/')[-1].split('-')[0]
 
+    # TODO: probably use {'drafts': 0, 'include_deleted': 0}
     storyinfo_req = session.get(API_STORYINFO + story_id, params={'drafts': 1, 'include_deleted': 1})
     storyinfo_json = json.loads(storyinfo_req.content)
 
@@ -84,7 +83,7 @@ def download_story(story_url):
     print 'Saving epub'
     # book.make(book.title + '.epub')
 
-# story_url = 'http://www.wattpad.com/story/8420562-winds-of-change'
+# story_url = 'http://www.wattpad.com/story/9876543-example-story'
 
 if sys.argv[1:]:
     story_urls = sys.argv[1:]
