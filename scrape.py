@@ -59,11 +59,11 @@ def download_story(story_url):
         chapter_title = part['title']
 
         if part['draft']:
-            print 'Skipping "{chapter_title}" part is draft'.format(chapter_title=chapter_title)
+            print 'Skipping "{chapter_title}": {chapter_id}, part is draft'.format(chapter_title=chapter_title, chapter_id=chapter_id)
             continue
 
         if 'deleted' in part and part['deleted']:
-            print 'Skipping "{chapter_title}" part is deleted'.format(chapter_title=chapter_title)
+            print 'Skipping "{chapter_title}": {chapter_id}, part is deleted'.format(chapter_title=chapter_title, chapter_id=chapter_id)
             continue
 
         chapter_id = part['id']
@@ -82,7 +82,7 @@ def download_story(story_url):
         book.sections.append(section)
 
     print 'Saving epub'
-    book.make(book.title + '.epub')
+    # book.make(book.title + '.epub')
 
 # story_url = 'http://www.wattpad.com/story/8420562-winds-of-change'
 
