@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>${book.title}</title>
+  <style type="text/css">
+  @page {padding: 0pt; margin:0pt}
+  body { text-align: center; padding:0pt; margin: 0pt; }
+.title, .authors {
+  text-align: center;
+  margin-bottom: 2em;
+}
+span.author {
+  margin: 1em;
+}
+.center{
+  text-align: center;
+}
+.notice{
+  margin-top: 5em;
+}
+  </style>
+</head>
+<body>
+  <h1 class="title">${book.title}</h1>
+  <h3 class="authors">
+  <py:for each="creator, _ in book.creators">
+  <span class="author">$creator</span>
+  </py:for>
+  </h3>
+  ${book.description}
+</body>
+</html>

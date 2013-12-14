@@ -1,0 +1,4 @@
+*.epub
+*.mobi
+*.pyc
+scrape.json

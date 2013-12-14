@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>${section.title}</title>
+  <style type="text/css">
+h1 { text-align: center; }
+p {
+  margin: 0;
+  padding: 0;
+  text-indent: 1.5em;
+}
+${section.css}
+  </style>
+</head>
+<body>
+  <h1>${section.title}</h1>
+  ${section.html}
+</body>
+</html>

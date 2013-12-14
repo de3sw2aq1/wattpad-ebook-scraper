@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://genshi.edgewall.org/">
+<head>
+  <title>${book.title}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <style type="text/css">
+.tocentry-1 {
+}
+.tocentry-2 {
+	text-indent: 1em;
+}
+.tocentry-3 {
+	text-indent: 2em;
+}
+.tocentry-4 {
+	text-indent: 3em;
+}
+.title {
+  text-align: center;
+  margin-bottom: 2em;
+}
+  </style>
+</head>
+<body>
+  <h2 class="title">${book.title}</h2>
+  <h3 class="title">Table of Contents</h3>
+  <py:def function="tocentry(node)">
+    <div class="tocentry-${node.depth}">
+      <a href="${node.href}">${node.get_index_str()}. ${node.title}</a>
+    </div>
+    <py:for each="child in node.children">
+    ${tocentry(child)}
+    </py:for>
+  </py:def>
+  <py:for each="child in book.get_toc_map_root().children">
+  ${tocentry(child)}
+  </py:for>
+</body>
+</html>
