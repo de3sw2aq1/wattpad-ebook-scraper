@@ -8,6 +8,7 @@ import sys
 from genshi.input import HTML
 
 # Setup session to not hit Android download app page
+# TODO: Cookies probably aren't needed if only API requests are made
 session = requests.session()
 session.cookies['android-noprompt'] = '1'
 session.cookies['skip-download-page'] = '1'
