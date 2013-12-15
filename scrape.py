@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
-import requests
-import json
-import dateutil.parser
-import ez_epub
 import sys
+import json
+import StringIO
+
+import requests
+import dateutil.parser
 from genshi.input import HTML
+
+import ez_epub
 
 # Setup session to not hit Android download app page
 # TODO: Cookies probably aren't needed if only API requests are made
@@ -44,6 +47,7 @@ def download_story(story_url):
     story_author = storyinfo_json['user']['name']
     story_categories = [categories[c] for c in storyinfo_json['categories'] if c in categories] # category can be 0
     story_rating = storyinfo_json['rating'] # TODO: I think 4 is adult?
+    story_cover = StringIO.StringIO(session.get(storyinfo_json['cover']).content)
 
     print 'Story "{story_title}": {story_id}'.format(story_title=story_title, story_id=story_id)
 
@@ -52,6 +56,7 @@ def download_story(story_url):
     book.title = story_title
     book.authors = [story_author]
     book.sections = []
+    book.impl.add_cover(story_cover)
     book.impl.description = HTML(story_description, encoding='utf-8') # TODO: not sure if this is HTML or text
     book.impl.add_meta('publisher', 'Wattpad - scraped')
     book.impl.add_meta('source', story_url)
