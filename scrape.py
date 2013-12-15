@@ -1,21 +1,22 @@
+#!/usr/bin/env python
+
 import requests
-import lxml.html
 import json
 import dateutil.parser
 import ez_epub
 import sys
 from genshi.input import HTML
 
-# Setup session to not hit android download app page
+# Setup session to not hit Android download app page
 session = requests.session()
 session.cookies['android-noprompt'] = '1'
 session.cookies['skip-download-page'] = '1'
 
-# Used by android app normally
-# Example parameters are what android provides
+# Used by Android app normally
+# Example parameters are what Android provides
 API_STORYINFO = 'http://www.wattpad.com/api/v3/stories/' #9876543?drafts=0&include_deleted=1
 
-# Used by website and android app normally
+# Used by website and Android app normally
 API_STORYTEXT = 'http://www.wattpad.com/apiv2/storytext' # ?id=23456789
 # Webpage uses a page parameter: ?id=23456789&page=1
 # Android uses these parameters: ?id=23456789&increment_read_count=1&include_paragraph_id=1&output=text_zip
@@ -81,7 +82,7 @@ def download_story(story_url):
         book.sections.append(section)
 
     print 'Saving epub'
-    # book.make(book.title + '.epub')
+    book.make(book.title + '.epub')
 
 # story_url = 'http://www.wattpad.com/story/9876543-example-story'
 
