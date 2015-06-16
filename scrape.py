@@ -24,6 +24,7 @@ API_STORYINFO = 'http://www.wattpad.com/api/v3/stories/' #9876543?drafts=0&inclu
 API_STORYTEXT = 'http://www.wattpad.com/apiv2/storytext' # ?id=23456789
 # Webpage uses a page parameter: ?id=23456789&page=1
 # Android uses these parameters: ?id=23456789&increment_read_count=1&include_paragraph_id=1&output=text_zip
+# Now (2015-06-15), returns HTML instead of JSON. output=json will get JSON again
 
 # Documented api
 API_GETCATEGORIES = 'http://www.wattpad.com/apiv2/getcategories'
@@ -80,7 +81,8 @@ def download_story(story_url):
         print 'Downloading "{chapter_title}": {chapter_id}'.format(chapter_title=chapter_title, chapter_id=chapter_id)
 
         chapter_req = session.get(API_STORYTEXT, params={'id': chapter_id})
-        chapter_html = json.loads(chapter_req.content)['text']
+        chapter_html = chapter_req.content
+
 
         section = ez_epub.Section()
         section.html = HTML(chapter_html, encoding='utf-8')
