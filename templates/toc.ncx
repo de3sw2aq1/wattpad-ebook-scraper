@@ -3,8 +3,8 @@
     xmlns:py="http://genshi.edgewall.org/"
     version="2005-1">
   <head>
-    <meta name="dtb:uid" content="urn:uuid:${book.uuid}"/>
-    <meta name="dtb:depth" content="${book.get_toc_map_height()}"/>
+    <meta name="dtb:uid" content="urn:uuid:${book.UUID}"/>
+    <meta name="dtb:depth" content="${book.getTocMapHeight()}"/>
     <meta name="dtb:totalPageCount" content="0"/>
     <meta name="dtb:maxPageNumber" content="0"/>
   </head>
@@ -13,7 +13,7 @@
   </docTitle>
   <navMap>
     <py:def function="navpoint(node)">
-    <navPoint id="navpoint-${node.play_order}" playOrder="${node.play_order}">
+    <navPoint id="navpoint-${node.playOrder}" playOrder="${node.playOrder}">
       <navLabel><text>${node.title}</text></navLabel>
       <content src="${node.href}"/>
       <py:for each="child in node.children">
@@ -21,7 +21,7 @@
       </py:for>
     </navPoint>
     </py:def>
-    <py:for each="child in book.get_toc_map_root().children">
+    <py:for each="child in book.getTocMapRoot().children">
     ${navpoint(child)}
     </py:for>
   </navMap>
