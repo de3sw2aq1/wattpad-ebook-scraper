@@ -35,7 +35,7 @@ Depends on [epubbuilder](https://github.com/footley/epubbuilder), [requests](htt
 Install them with `pip3`:
 
 ```
-$ pip3 install epubbuilder requests python-dateutil
+$ pip3 install genshi lxml epubbuilder requests python-dateutil
 ```
 
 ## TODO
