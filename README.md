@@ -9,13 +9,13 @@ Please use this for personal use only.
 List one or more story URLs as command line arguments
 
 ```
-$ python scrape.py http://www.wattpad.com/story/9876543-example-story http://www.wattpad.com/story/9999999-example-story-2
+$ python3 scrape.py http://www.wattpad.com/story/9876543-example-story http://www.wattpad.com/story/9999999-example-story-2
 ```
 
 Or feed it a list of story URLs, one per line, via standard input.
 
 ```
-$ python scrape.py < list_of_story_urls.txt
+$ python3 scrape.py < list_of_story_urls.txt
 ```
 
 You may convert the epub to a mobi file with `kindlegen` or similar tools if desired.
@@ -32,10 +32,10 @@ The chapters are assembled into an epub with epubbuilder, but nothing is really 
 
 Depends on [epubbuilder](https://github.com/footley/epubbuilder), [requests](http://python-requests.org) and [python-dateutil](http://labix.org/python-dateutil).
 
-Install them with `pip`:
+Install them with `pip3`:
 
 ```
-$ pip install epubbuilder requests python-dateutil
+$ pip3 install epubbuilder requests python-dateutil
 ```
 
 ## TODO

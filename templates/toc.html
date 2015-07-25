@@ -26,13 +26,13 @@
   <h3 class="title">Table of Contents</h3>
   <py:def function="tocentry(node)">
     <div class="tocentry-${node.depth}">
-      <a href="${node.href}">${node.get_index_str()}. ${node.title}</a>
+      <a href="${node.href}">${node.title}</a>
     </div>
     <py:for each="child in node.children">
     ${tocentry(child)}
     </py:for>
   </py:def>
-  <py:for each="child in book.get_toc_map_root().children">
+  <py:for each="child in book.getTocMapRoot().children">
   ${tocentry(child)}
   </py:for>
 </body>

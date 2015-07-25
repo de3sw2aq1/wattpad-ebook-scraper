@@ -1,14 +1,12 @@
 # Copyright (c) 2012, Bin Tan
-# This file is distributed under the BSD Licence. See python-epub-builder-license.txt for details.
+# This file is distributed under the BSD Licence.
+# See python-epub-builder-license.txt for details.
 
-from epubbuilder import epubbuilder
+import epub
 from genshi.template import TemplateLoader
-import os
 
-TEMPLATE_PATH = os.path.join(os.path.split(__file__)[0], "templates")
 
 class Section:
-
     def __init__(self):
         self.title = ''
         self.subsections = []
@@ -16,45 +14,45 @@ class Section:
         self.text = []
         self.templateFileName = 'ez-section.html'
 
+
 class Book:
-
-    def __init__(self):
-        self.impl = epubbuilder.EpubBook()
-
-        self.loader = TemplateLoader(TEMPLATE_PATH)
-        self.impl.loader = self.loader
-
+    def __init__(self, template_dir="templates"):
+        self.impl = epub.EpubBook()
         self.title = ''
         self.authors = []
         self.cover = ''
         self.lang = 'en-US'
         self.sections = []
+        self.templateLoader = TemplateLoader(template_dir)
 
-    def __add_section(self, section, id, depth):
+    def __addSection(self, section, id, depth):
         if depth > 0:
-            stream = self.loader.load(section.templateFileName).generate(section = section)
-            html = stream.render('xhtml', doctype = 'xhtml11', drop_xml_decl = False)
-            item = self.impl.add_html('%s.html' % id, html.decode('utf8'))
-            self.impl.add_spine_item(item)
-            self.impl.add_toc_map_node(item.dest_path, section.title, parent=None)
+            stream = self.templateLoader.load(
+                section.templateFileName).generate(section=section)
+            html = stream.render(
+                'xhtml', doctype='xhtml11', drop_xml_decl=False)
+            item = self.impl.addHtml('', '%s.html' % id, html)
+            self.impl.addSpineItem(item)
+            self.impl.addTocMapNode(item.destPath, section.title, depth)
             id += '.'
         if len(section.subsections) > 0:
             for i, subsection in enumerate(section.subsections):
-                self.__add_section(subsection, id + str(i + 1), depth + 1)
+                self.__addSection(subsection, id + str(i + 1), depth + 1)
 
-    def make(self, output):
-        self.impl.set_title(self.title)
-        self.impl.set_language(self.lang)
+    def make(self, outputDir, validate=False):
+        outputFile = outputDir + '.epub'
+        self.impl.setTitle(self.title)
+        self.impl.setLang(self.lang)
         for author in self.authors:
-            self.impl.add_creator(author)
+            self.impl.addCreator(author)
         if self.cover:
-            self.impl.add_cover(self.cover)
-        self.impl.add_title_page()
-        self.impl.add_toc_page()
+            self.impl.addCover(self.cover)
+        self.impl.addTitlePage()
+        self.impl.addTocPage()
         root = Section()
         root.subsections = self.sections
-        self.__add_section(root, 's', 0)
-        self.impl.create_book(output)
-        # self.impl.create_archive(outputDir, outputFile)
-        #self.impl.checkEpub('epubcheck-3.0-RC-1.jar', outputFile)
-
+        self.__addSection(root, 's', 0)
+        self.impl.createBook(outputDir)
+        self.impl.createArchive(outputDir, outputFile)
+        if validate:
+            self.impl.checkEpub('epubcheck-1.0.5.jar', outputFile)
