@@ -12,26 +12,25 @@ from genshi.input import HTML
 import ez_epub
 
 # Setup session to not hit Android download app page
-# TODO: Cookies probably aren't needed if only API requests are made
 session = requests.session()
-session.cookies['android-noprompt'] = '1'
-session.cookies['skip-download-page'] = '1'
+# No user agent. Wattpad now blocks all user agents containing "Python".
+session.headers['User-Agent'] = ''
 
 # Used by Android app normally
 # Example parameters are what Android provides
-API_STORYINFO = 'http://www.wattpad.com/api/v3/stories/' #9876543?drafts=0&include_deleted=1
+API_STORYINFO = 'https://www.wattpad.com/api/v3/stories/' #9876543?drafts=0&include_deleted=1
 
 # Used by website and Android app normally
-API_STORYTEXT = 'http://www.wattpad.com/apiv2/storytext' # ?id=23456789
+API_STORYTEXT = 'https://www.wattpad.com/apiv2/storytext' # ?id=23456789
 # Webpage uses a page parameter: ?id=23456789&page=1
 # Android uses these parameters: ?id=23456789&increment_read_count=1&include_paragraph_id=1&output=text_zip
 # Now (2015-06-15), returns HTML instead of JSON. output=json will get JSON again
 
 # Documented api
-API_GETCATEGORIES = 'http://www.wattpad.com/apiv2/getcategories'
+API_GETCATEGORIES = 'https://www.wattpad.com/apiv2/getcategories'
 
 # Fixup the categories data, this could probably be cached too
-categories = json.loads(session.get(API_GETCATEGORIES).content.decode('utf-8'))
+categories = session.get(API_GETCATEGORIES).json()
 categories = {int(k): v for k, v in categories.items()}
 
 def download_story(story_url):
