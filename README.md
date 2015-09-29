@@ -49,4 +49,3 @@ $ pip3 install genshi lxml epubbuilder requests python-dateutil
 *   Clean up XHTML output for epub, remove extra HTML attributes.
 *   Actually do error checking on API responses
     -   Handle stories not existing, etc.
-*   Verify that cookies are unneeded when only making API requests and remove them if so
