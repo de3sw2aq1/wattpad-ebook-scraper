@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import time
-import json
 import io
 
 import requests
@@ -38,17 +36,16 @@ def download_story(story_url):
     story_id = story_url.split('/')[-1].split('-')[0]
 
     # TODO: probably use {'drafts': 0, 'include_deleted': 0}
-    storyinfo_req = session.get(API_STORYINFO + story_id, params={'drafts': 1, 'include_deleted': 1})
-    storyinfo_json = json.loads(storyinfo_req.content.decode('utf-8'))
+    storyinfo = session.get(API_STORYINFO + story_id, params={'drafts': 1, 'include_deleted': 1}).json()
 
-    story_title = storyinfo_json['title']
-    story_description = storyinfo_json['description']
-    story_createDate = dateutil.parser.parse(storyinfo_json['createDate'])
-    story_modifyDate = dateutil.parser.parse(storyinfo_json['modifyDate'])
-    story_author = storyinfo_json['user']['name']
-    story_categories = [categories[c] for c in storyinfo_json['categories'] if c in categories] # category can be 0
-    story_rating = storyinfo_json['rating'] # TODO: I think 4 is adult?
-    story_cover = io.BytesIO(session.get(storyinfo_json['cover']).content)
+    story_title = storyinfo['title']
+    story_description = storyinfo['description']
+    story_createDate = dateutil.parser.parse(storyinfo['createDate'])
+    story_modifyDate = dateutil.parser.parse(storyinfo['modifyDate'])
+    story_author = storyinfo['user']['name']
+    story_categories = [categories[c] for c in storyinfo['categories'] if c in categories] # category can be 0
+    story_rating = storyinfo['rating'] # TODO: I think 4 is adult?
+    story_cover = io.BytesIO(session.get(storyinfo['cover']).content)
 
     print('Story "{story_title}": {story_id}'.format(story_title=story_title, story_id=story_id))
 
@@ -62,7 +59,7 @@ def download_story(story_url):
     book.impl.addMeta('publisher', 'Wattpad - scraped')
     book.impl.addMeta('source', story_url)
 
-    for part in storyinfo_json['parts']:
+    for part in storyinfo['parts']:
         chapter_title = part['title']
 
         if part['draft']:
