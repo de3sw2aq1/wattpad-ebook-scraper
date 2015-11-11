@@ -6,13 +6,13 @@ Please use this for personal use only.
 
 ## Usage
 
-List one or more story URLs as command line arguments
+List one or more story or chapter URLs as command line arguments.
 
 ```
 $ python3 scrape.py http://www.wattpad.com/story/9876543-example-story http://www.wattpad.com/story/9999999-example-story-2
 ```
 
-Or feed it a list of story URLs, one per line, via standard input.
+Or feed it a list of URLs, one per line, via standard input.
 
 ```
 $ python3 scrape.py < list_of_story_urls.txt
@@ -48,4 +48,3 @@ $ pip3 install genshi lxml epubbuilder requests python-dateutil smartypants
     -   That said, this probably violates the rest of the ToS everywhere else, but may as well be nice and not thrash sites with fast downloads.
 *   Clean up XHTML output for epub, remove extra HTML attributes.
 *   Actually do error checking on API responses
-    -   Handle stories not existing, etc.

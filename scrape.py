@@ -2,6 +2,7 @@
 
 import sys
 import io
+import re
 
 import requests
 import dateutil.parser
@@ -25,6 +26,8 @@ API_STORYTEXT = 'https://www.wattpad.com/apiv2/storytext' # ?id=23456789
 # Android uses these parameters: ?id=23456789&increment_read_count=1&include_paragraph_id=1&output=text_zip
 # Now (2015-06-15), returns HTML instead of JSON. output=json will get JSON again
 
+API_CHAPTERINFO = 'https://www.wattpad.com/apiv2/info' # ?id=23456789
+
 # Documented api
 API_GETCATEGORIES = 'https://www.wattpad.com/apiv2/getcategories'
 
@@ -34,10 +37,7 @@ ILLEAGAL_FILENAME_CHARACTERS = str.maketrans(r'.<>:"/\|?*^', '-----------')
 categories = session.get(API_GETCATEGORIES).json()
 categories = {int(k): v for k, v in categories.items()}
 
-def download_story(story_url):
-    # TODO verify input URL better
-    story_id = story_url.split('/')[-1].split('-')[0]
-
+def download_story(story_id):
     # TODO: probably use {'drafts': 0, 'include_deleted': 0}
     storyinfo = session.get(API_STORYINFO + story_id, params={'drafts': 1, 'include_deleted': 1}).json()
 
@@ -94,13 +94,41 @@ def download_story(story_url):
     print('Saving epub')
     book.make('./{title}'.format(title=book.title.translate(ILLEAGAL_FILENAME_CHARACTERS)))
 
-# story_url = 'http://www.wattpad.com/story/9876543-example-story'
 
-if sys.argv[1:]:
-    story_urls = sys.argv[1:]
-else:
-    story_urls = sys.stdin
+def get_story_id(url):
+    # Extract the id number from the url
+    match = re.search(r'\d+', url)
+    if not match:
+        return None
 
-for story_url in story_urls:
-    download_story(story_url)
+    # Check if it's a valid id of a story
+    url_id = match.group()
+    storyinfo_req = session.get(API_STORYINFO + url_id)
+    if storyinfo_req.ok:
+        return url_id
 
+    # If not, check if it's a chapter id and retrieve the story id
+    chapterinfo_req = session.get(API_CHAPTERINFO, params={'id': url_id})
+    if not chapterinfo_req.ok:
+        return None
+    story_url = chapterinfo_req.json()['url']
+    story_id = re.search(r'\d+', story_url).group()
+    return story_id
+
+
+def main():
+    if sys.argv[1:]:
+        story_urls = sys.argv[1:]
+    else:
+        story_urls = sys.stdin
+
+    for story_url in story_urls:
+        story_id = get_story_id(story_url)
+        if story_id:
+            download_story(story_id)
+        else:
+            print('ERROR: could not retrieve story', story_url)
+
+
+if __name__ == '__main__':
+    main()
