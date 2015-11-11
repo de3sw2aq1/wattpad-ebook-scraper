@@ -22,7 +22,7 @@ span.author {
   </style>
 </head>
 <body>
-  <h1 class="title">${book.title}</h1>
+  <h1 class="title"><a href="${book.url}">${book.title}</a></h1>
   <h3 class="authors">
   <py:for each="creator, _ in book.creators">
   <span class="author">$creator</span>

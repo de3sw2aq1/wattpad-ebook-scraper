@@ -49,6 +49,7 @@ def download_story(story_url):
     story_categories = [categories[c] for c in storyinfo['categories'] if c in categories] # category can be 0
     story_rating = storyinfo['rating'] # TODO: I think 4 is adult?
     story_cover = io.BytesIO(session.get(storyinfo['cover']).content)
+    story_url = storyinfo['url']
 
     print('Story "{story_title}": {story_id}'.format(story_title=story_title, story_id=story_id))
 
@@ -59,6 +60,7 @@ def download_story(story_url):
     book.sections = []
     book.impl.addCover(fileobj=story_cover)
     book.impl.description = HTML(story_description, encoding='utf-8') # TODO: not sure if this is HTML or text
+    book.impl.url = story_url
     book.impl.addMeta('publisher', 'Wattpad - scraped')
     book.impl.addMeta('source', story_url)
 
