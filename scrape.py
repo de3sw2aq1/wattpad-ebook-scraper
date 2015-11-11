@@ -6,6 +6,7 @@ import io
 import requests
 import dateutil.parser
 from genshi.input import HTML
+import smartypants
 
 import ez_epub
 
@@ -79,8 +80,8 @@ def download_story(story_url):
 
         print('Downloading "{chapter_title}": {chapter_id}'.format(chapter_title=chapter_title, chapter_id=chapter_id))
 
-        chapter_req = session.get(API_STORYTEXT, params={'id': chapter_id})
-        chapter_html = chapter_req.content
+        chapter_html = session.get(API_STORYTEXT, params={'id': chapter_id, 'output': 'json'}).json()['text']
+        chapter_html = smartypants.smartypants(chapter_html)
 
 
         section = ez_epub.Section()

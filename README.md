@@ -30,12 +30,12 @@ The chapters are assembled into an epub with epubbuilder, but nothing is really 
 
 ## Dependencies
 
-Depends on [epubbuilder](https://github.com/footley/epubbuilder), [requests](http://python-requests.org) and [python-dateutil](http://labix.org/python-dateutil).
+Depends on [epubbuilder](https://github.com/footley/epubbuilder), [requests](http://python-requests.org), [python-dateutil](http://labix.org/python-dateutil) and [smartypants](https://pypi.python.org/pypi/smartypants/).
 
 Install them with `pip3`:
 
 ```
-$ pip3 install genshi lxml epubbuilder requests python-dateutil
+$ pip3 install genshi lxml epubbuilder requests python-dateutil smartypants
 ```
 
 ## TODO
