@@ -27,6 +27,8 @@ API_STORYTEXT = 'https://www.wattpad.com/apiv2/storytext' # ?id=23456789
 # Documented api
 API_GETCATEGORIES = 'https://www.wattpad.com/apiv2/getcategories'
 
+ILLEAGAL_FILENAME_CHARACTERS = str.maketrans(r'.<>:"/\|?*^', '-----------')
+
 # Fixup the categories data, this could probably be cached too
 categories = session.get(API_GETCATEGORIES).json()
 categories = {int(k): v for k, v in categories.items()}
@@ -87,7 +89,7 @@ def download_story(story_url):
         book.sections.append(section)
 
     print('Saving epub')
-    book.make('./{title}'.format(title=book.title))
+    book.make('./{title}'.format(title=book.title.translate(ILLEAGAL_FILENAME_CHARACTERS)))
 
 # story_url = 'http://www.wattpad.com/story/9876543-example-story'
 
